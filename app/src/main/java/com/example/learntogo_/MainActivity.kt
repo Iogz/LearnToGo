@@ -51,9 +51,11 @@ fun NavigationAppHost(navController: NavHostController) {
 
     val ctx  = LocalContext.current
 
+
     NavHost(navController = navController, startDestination = "home") {
         composable(Destination.Home.route) { HomeScreen(navController) }
         composable(Destination.Account.route) { AccScreen(navController) }
         composable(Destination.Location.route) { LocationScreen(navController) }
+
     }
 }

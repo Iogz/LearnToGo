@@ -44,7 +44,6 @@ fun HomeScreen(navHostController: NavHostController,
                 modifier = Modifier
                     .background(BlueViolet1)
                     .fillMaxSize(),
-
                 Alignment.TopStart
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically,
