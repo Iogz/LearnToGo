@@ -55,7 +55,7 @@ fun HomeScreen(navHostController: NavHostController,
                         .padding(horizontal = 15.dp, vertical = 20.dp)
                         .fillMaxWidth()) {
                     Column(Modifier.verticalScroll(rememberScrollState())) {
-                        Image(bitmap = ImageBitmap.imageResource(id = R.drawable.unnamed), contentDescription = "Amk")
+                        Image(bitmap = ImageBitmap.imageResource(id = R.drawable.unnamed), contentDescription = "-")
 
                         Text(
                             text = bottomState,

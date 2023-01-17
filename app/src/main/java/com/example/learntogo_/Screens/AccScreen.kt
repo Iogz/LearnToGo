@@ -1,34 +1,174 @@
 package com.example.learntogo_
 
+import android.graphics.drawable.Icon
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.learntogo_.ui.theme.primaryColor
+import com.example.learntogo_.ui.theme.whiteBackground
 
 @Composable
 fun AccScreen(navController: NavController) {
-    val elements = MutableList(100) { it }
-    LazyColumn(modifier = Modifier.background(Color.LightGray)) {
-        items(elements) {
-            Row(modifier = Modifier
-                .padding(4.dp)
+    // val image = imageResource(id = R.drawable.register_page)
+
+    val nameValue = remember { mutableStateOf("") }
+    val emailValue = remember { mutableStateOf("") }
+    val phoneValue = remember { mutableStateOf("") }
+    val passwordValue = remember { mutableStateOf("") }
+    val confirmPasswordValue = remember { mutableStateOf("") }
+
+    val passwordVisibility = remember { mutableStateOf(false) }
+    val confirmPasswordVisibility = remember { mutableStateOf(false) }
+
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            //Image(image)
+        }
+
+
+        Column(
+            modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(4.dp))
-                .background(Color.White)
-                .padding(4.dp)
-                //     .clickable { navController.navigate(Destination.Detail.createRoute(it)) }
+                .fillMaxHeight(0.70f)
+         //       .clip(RoundedCornerShape(topLeft = 30.dp, topRight = 30.dp))
+                .background(whiteBackground)
+                .padding(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Element $it")
+                Text(
+                    text = "Registrieren", fontSize = 20.sp,
+                    style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 2.sp
+                    )
+                )
+                Spacer(modifier = Modifier.padding(20.dp))
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    OutlinedTextField(
+                        value = nameValue.value,
+                        onValueChange = { nameValue.value = it },
+                        label = { Text(text = "Name") },
+                        placeholder = { Text(text = "Name") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    )
+
+                    OutlinedTextField(
+                        value = emailValue.value,
+                        onValueChange = { emailValue.value = it },
+                        label = { Text(text = "E-Mail") },
+                        placeholder = { Text(text = "E-Mail") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(0.8f)
+                    )
+
+                    OutlinedTextField(
+                        value = phoneValue.value,
+                        onValueChange = { phoneValue.value = it },
+                        label = { Text(text = "Telefonnumer") },
+                        placeholder = { Text(text = "Telefonnumer") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(0.8f),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+                    )
+
+                    OutlinedTextField(
+                        value = passwordValue.value,
+                        onValueChange = { passwordValue.value = it },
+                        label = { Text(text = "Passwort") },
+                        placeholder = { Text(text = "Passwort") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(0.8f),
+                        trailingIcon = {
+                            IconButton(onClick = {
+                                passwordVisibility.value = !passwordVisibility.value
+                            }) {
+
+                               /* Icon(
+                                    imageVector = vectorResource(id = R.drawable.password_eye),
+                                    tint = if (passwordVisibility.value) primaryColor else Color.Gray
+                                ) **/
+                            }
+                        },
+                        visualTransformation = if (passwordVisibility.value) VisualTransformation.None
+                        else PasswordVisualTransformation()
+                    )
+
+                    OutlinedTextField(
+                        value = confirmPasswordValue.value,
+                        onValueChange = { confirmPasswordValue.value = it },
+                        label = { Text(text = "Passwort bestätigen") },
+                        placeholder = { Text(text = "Passwort bestätigen") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(0.8f),
+                        trailingIcon = {
+                            IconButton(onClick = {
+                                confirmPasswordVisibility.value = !confirmPasswordVisibility.value
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Info,
+                                    contentDescription = null,
+                                    )
+                            }
+                        },
+                        visualTransformation = if (confirmPasswordVisibility.value) VisualTransformation.None
+                        else PasswordVisualTransformation()
+                    )
+                    Spacer(modifier = Modifier.padding(10.dp))
+                    Button(onClick = { }, modifier = Modifier
+                        .fillMaxWidth(0.8f)
+                        .height(50.dp)) {
+                        Text(text = "Registrieren", fontSize = 20.sp)
+                    }
+                    Spacer(modifier = Modifier.padding(20.dp))
+                    Text(
+                        text = "Login",
+                        modifier = Modifier.clickable(onClick = {
+                            navController.navigate("login_page"){
+                              //  popUpTo = navController.graph.startDestination
+                                launchSingleTop = true
+                            }
+                        })
+                    )
+                    Spacer(modifier = Modifier.padding(20.dp))
+
+                }
+
             }
         }
     }
