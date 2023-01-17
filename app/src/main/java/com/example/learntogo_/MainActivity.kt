@@ -2,7 +2,9 @@ package com.example.learntogo_
 
 import HomeScreen
 import LocationScreen
+import LoginScreen
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,10 +24,9 @@ import com.example.learntogo_.ui.theme.LearnToGo_Theme
 sealed class Destination (val route: String) {
     object  Home:  Destination ("home")
     object  Account:  Destination ("account")
-    object  Location:  Destination ("li")
-    object  Detail:  Destination ("detail/{elementid}") {
-        fun createRoute (element: Int) = "detail/$element"
-    }
+    object  Register: Destination ("register")
+    object  Location:  Destination ("location")
+
 }
 
 class MainActivity : ComponentActivity() {
@@ -49,13 +50,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun NavigationAppHost(navController: NavHostController) {
 
-    val ctx  = LocalContext.current
-
-
     NavHost(navController = navController, startDestination = "home") {
         composable(Destination.Home.route) { HomeScreen(navController) }
-        composable(Destination.Account.route) { AccScreen(navController) }
+        composable(Destination.Account.route) { LoginScreen(navController) }
         composable(Destination.Location.route) { LocationScreen(navController) }
+        composable(Destination.Register.route) { RegisterScreen(navController) }
 
     }
 }
