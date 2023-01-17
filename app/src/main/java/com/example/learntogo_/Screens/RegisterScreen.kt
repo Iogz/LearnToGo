@@ -1,57 +1,50 @@
 package com.example.learntogo_
 
-import android.graphics.drawable.Icon
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.learntogo_.ui.theme.primaryColor
 import com.example.learntogo_.ui.theme.whiteBackground
 
 @Composable
-fun AccScreen(navController: NavController) {
-    // val image = imageResource(id = R.drawable.register_page)
+fun RegisterScreen(navController: NavController) {
 
     val nameValue = remember { mutableStateOf("") }
     val emailValue = remember { mutableStateOf("") }
     val phoneValue = remember { mutableStateOf("") }
-    val passwordValue = remember { mutableStateOf("") }
     val confirmPasswordValue = remember { mutableStateOf("") }
-
-    val passwordVisibility = remember { mutableStateOf(false) }
     val confirmPasswordVisibility = remember { mutableStateOf(false) }
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White),
             contentAlignment = Alignment.TopCenter
         ) {
-            //Image(image)
+            val imagelogo = Image(bitmap = ImageBitmap.imageResource(id = R.drawable.unnamed), contentDescription = "-")
+
         }
 
 
@@ -59,14 +52,15 @@ fun AccScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.70f)
-         //       .clip(RoundedCornerShape(topLeft = 30.dp, topRight = 30.dp))
+                //       .clip(RoundedCornerShape(topLeft = 30.dp, topRight = 30.dp))
                 .background(whiteBackground)
                 .padding(10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -78,7 +72,8 @@ fun AccScreen(navController: NavController) {
                     )
                 )
                 Spacer(modifier = Modifier.padding(20.dp))
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(Modifier.verticalScroll(rememberScrollState()),
+                    horizontalAlignment = Alignment.CenterHorizontally) {
                     OutlinedTextField(
                         value = nameValue.value,
                         onValueChange = { nameValue.value = it },
@@ -108,32 +103,10 @@ fun AccScreen(navController: NavController) {
                     )
 
                     OutlinedTextField(
-                        value = passwordValue.value,
-                        onValueChange = { passwordValue.value = it },
-                        label = { Text(text = "Passwort") },
-                        placeholder = { Text(text = "Passwort") },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f),
-                        trailingIcon = {
-                            IconButton(onClick = {
-                                passwordVisibility.value = !passwordVisibility.value
-                            }) {
-
-                               /* Icon(
-                                    imageVector = vectorResource(id = R.drawable.password_eye),
-                                    tint = if (passwordVisibility.value) primaryColor else Color.Gray
-                                ) **/
-                            }
-                        },
-                        visualTransformation = if (passwordVisibility.value) VisualTransformation.None
-                        else PasswordVisualTransformation()
-                    )
-
-                    OutlinedTextField(
                         value = confirmPasswordValue.value,
                         onValueChange = { confirmPasswordValue.value = it },
-                        label = { Text(text = "Passwort bestätigen") },
-                        placeholder = { Text(text = "Passwort bestätigen") },
+                        label = { Text(text = "Passwort") },
+                        placeholder = { Text(text = "Passwort") },
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(0.8f),
                         trailingIcon = {
@@ -141,9 +114,9 @@ fun AccScreen(navController: NavController) {
                                 confirmPasswordVisibility.value = !confirmPasswordVisibility.value
                             }) {
                                 Icon(
-                                    imageVector = Icons.Default.Info,
-                                    contentDescription = null,
-                                    )
+                                    painter = painterResource(id = R.drawable.ic_baseline_remove_red_eye_24),
+                                    contentDescription = null
+                                )
                             }
                         },
                         visualTransformation = if (confirmPasswordVisibility.value) VisualTransformation.None
@@ -155,16 +128,8 @@ fun AccScreen(navController: NavController) {
                         .height(50.dp)) {
                         Text(text = "Registrieren", fontSize = 20.sp)
                     }
+
                     Spacer(modifier = Modifier.padding(20.dp))
-                    Text(
-                        text = "Login",
-                        modifier = Modifier.clickable(onClick = {
-                            navController.navigate("login_page"){
-                              //  popUpTo = navController.graph.startDestination
-                                launchSingleTop = true
-                            }
-                        })
-                    )
                     Spacer(modifier = Modifier.padding(20.dp))
 
                 }
@@ -173,3 +138,4 @@ fun AccScreen(navController: NavController) {
         }
     }
 }
+

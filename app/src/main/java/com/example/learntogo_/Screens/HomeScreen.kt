@@ -55,7 +55,8 @@ fun HomeScreen(navHostController: NavHostController,
                         .padding(horizontal = 15.dp, vertical = 20.dp)
                         .fillMaxWidth()) {
                     Column(Modifier.verticalScroll(rememberScrollState())) {
-                        Image(bitmap = ImageBitmap.imageResource(id = R.drawable.unnamed), contentDescription = "-")
+
+                        Image(bitmap = ImageBitmap.imageResource(id = R.drawable.unnamed), contentDescription = "logo")
 
                         Text(
                             text = bottomState,
@@ -130,37 +131,3 @@ fun HomeScreen(navHostController: NavHostController,
     )
 }
 
-
-
-
-@Composable
-fun GreetingSection(
-    name: String = "Irmak"
-) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(15.dp)
-    ) {
-        Column(
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = "Good morning, $name",
-                style = MaterialTheme.typography.h2
-            )
-            Text(
-                text = "We wish you have a good day!",
-                style = MaterialTheme.typography.body1
-            )
-        }
-        Icon(
-            imageVector = Icons.Default.Add,
-            contentDescription = "Search",
-            tint = Color.White,
-            modifier = Modifier.size(24.dp)
-        )
-    }
-}
