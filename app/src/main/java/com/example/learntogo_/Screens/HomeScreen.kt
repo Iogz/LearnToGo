@@ -34,6 +34,12 @@ fun HomeScreen(navHostController: NavHostController,
                color: Color = BlueViolet2
 )  {
 
+    /** Cacheing!!! (Zwischenspeicher) verwendent, vllt Notizen auf dem HomeScreen?
+     *  Damit User nicht warten muss, falls kein Netz etc. verfügbar ist.*/
+
+    /** Nicht sauber gebatcht, aus dem und dem Grund, könnte man soll drauf eingehen
+     *  in dem Paper, generell Sachen, die man hätte basser machen können.*/
+
     //by: a delegated property. You are delegating your method calls to that which is to the right of the by operator
     val bottomState by remember { mutableStateOf("LearnToGo" ) }
 

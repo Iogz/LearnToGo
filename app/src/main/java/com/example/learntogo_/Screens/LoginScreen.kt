@@ -111,6 +111,7 @@ fun LoginScreen(navController: NavController) {
                     ) {
                         Text(text = "Anmelden", fontSize = 20.sp)
                     }
+                    // Sobald  man auf anmeldemn tippt - Abspeicherung in Firebase (FirebaseFunktion aufrufen?)
                     Spacer(modifier = Modifier.padding(20.dp))
                     Text(
                         text = "Registrieren",
