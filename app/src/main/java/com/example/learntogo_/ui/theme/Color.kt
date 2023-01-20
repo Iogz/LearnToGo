@@ -27,3 +27,6 @@ val BlueViolet3 = Color(0xff8f98fd)
 
 val primaryColor = Color(0xFF7048B6)
 val whiteBackground = Color(0xFFF7F7F7)
+
+val lightBlue = Color(0xffd8e6ff)
+val blue = Color(0xff76a9ff)

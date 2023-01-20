@@ -1,12 +1,12 @@
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -14,6 +14,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -22,104 +23,128 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.learntogo_.ui.theme.whiteBackground
 import com.example.learntogo_.R
 import com.example.learntogo_.Destination
+import com.example.learntogo_.data.SignInViewModel
+import com.example.learntogo_.data.SignUpViewModel
+import com.example.learntogo_.ui.theme.lightBlue
+import kotlinx.coroutines.launch
 
+
+/** Sign in kommt rraus
+ *
+ *
+ * Creating Chatting  Application in ADS using Kotlin GeeksforGeeks
+ * wer ist in meiner Nähe Koordinaten-Berechnung
+ * GPS Koordinaten auslesen
+ *
+ *
+ * Kamera (Sensoren)
+ * Konzept
+ * */
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(
+    navController: NavController, viewModel: SignInViewModel = hiltViewModel()
+) {
 
-    val emailValue = remember { mutableStateOf("") }
-    val passwordValue = remember { mutableStateOf("") }
-    val passwordVisibility = remember { mutableStateOf(false) }
-    val focusRequester = remember { FocusRequester() }
+    var email by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val state = viewModel.signInState.collectAsState(initial = null)
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomCenter
+    Column (
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 30.dp, end = 30.dp),
+        verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White),
-            contentAlignment = Alignment.TopCenter
-        )  {
-            Image(
-                bitmap = ImageBitmap.imageResource(id = R.drawable.unnamed),
-                contentDescription = "logo"
-            )
-        }
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+        Text (
+            text = "Enter your credentials to register",
+            fontWeight = FontWeight.Medium,
+            fontSize = 15.sp,
+            color = Color.Gray,
+        )
+        TextField(value = email, onValueChange = {
+            email = it
+        }, modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = lightBlue,
+                cursorColor = Color.Black,
+                disabledLabelColor = lightBlue, unfocusedIndicatorColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent
+            ), shape = RoundedCornerShape(8.dp), singleLine = true, placeholder = {
+                Text(text = "Email")
+            }
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        TextField(value = password, onValueChange = {
+            password = it
+        }, modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = lightBlue,
+                cursorColor = Color.Black,
+                disabledLabelColor = lightBlue, unfocusedIndicatorColor = Color.Transparent,
+                focusedIndicatorColor = Color.Transparent
+            ), shape = RoundedCornerShape(8.dp), singleLine = true, placeholder = {
+                Text(text = "Password")
+            }
+        )
+
+
+        Button (
+            onClick = {
+                scope.launch {
+                    viewModel.loginUser(email, password)
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.60f)
-                .background(whiteBackground)
-                .padding(10.dp)
-        ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = "LearnToGo",
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 2.sp
-                    ),
-                    fontSize = 30.sp
-                )
-                Spacer(modifier = Modifier.padding(20.dp))
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    OutlinedTextField(
-                        value = emailValue.value,
-                        onValueChange =  {emailValue.value = it },
-                        label = { Text(text = "Name") },
-                        placeholder = { Text(text = "Name") },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth(0.8f),
+                .padding(top = 20.dp, start = 30.dp, end = 30.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.Black, contentColor = Color.White
+            ), shape = RoundedCornerShape(15.dp)){
+            Text (text = "Sign Up", color = Color.White, modifier = Modifier.padding(7.dp))
+        }
 
-                    )
-                    OutlinedTextField(
-                        value = passwordValue.value,
-                        onValueChange = { passwordValue.value = it },
-                        trailingIcon = {
-                            IconButton(onClick = {
-                                passwordVisibility.value = !passwordVisibility.value
-                            }) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_baseline_remove_red_eye_24),
-                                    contentDescription = null
-                                )
-                            }
-                        },
-                        label = { Text("Passwort") },
-                        placeholder = { Text(text = "Passwort") },
-                        singleLine = true,
-                        visualTransformation = if (passwordVisibility.value) VisualTransformation.None
-                        else PasswordVisualTransformation(),
-                        modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .focusRequester(focusRequester = focusRequester),
-                    )
-                    Spacer(modifier = Modifier.padding(10.dp))
-                    Button(
-                        onClick = {},
-                        modifier = Modifier
-                            .fillMaxWidth(0.8f)
-                            .height(50.dp)
-                    ) {
-                        Text(text = "Anmelden", fontSize = 20.sp)
+        Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center){
+            if (state.value?.isLoading == true) {
+                CircularProgressIndicator()
+            }
+        }
+        Text(
+            text = "Already Have an Account? Sign in",
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+        )
+        Text (text = "or conncnt with", fontWeight = FontWeight.Medium, color = Color.Gray)
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp), horizontalArrangement = Arrangement.Center) {
+            IconButton(onClick = { /*TODO*/ }) {
+                Text("Hi")
+            }
+            LaunchedEffect(key1 = state.value?.isSuccess ) {
+                scope.launch {
+                    if (state.value?.isSuccess?.isNotEmpty() == true){
+                        val success = state.value?.isSuccess
+                        Toast.makeText(context, "${success}", Toast.LENGTH_LONG).show()
                     }
-                    // Sobald  man auf anmeldemn tippt - Abspeicherung in Firebase (FirebaseFunktion aufrufen?)
-                    Spacer(modifier = Modifier.padding(20.dp))
-                    Text(
-                        text = "Registrieren",
-                        modifier = Modifier.clickable(onClick = {
-                            navController.navigate(Destination.Register.route)
-                        })
-                    )
-                    Spacer(modifier = Modifier.padding(20.dp))
+                }
+            }
+
+            LaunchedEffect(key1 = state.value?.isError ) {
+                scope.launch {
+                    if (state.value?.isError?.isNotEmpty() == true){
+                        val error = state.value?.isError
+                        Toast.makeText(context, "${error}", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }
