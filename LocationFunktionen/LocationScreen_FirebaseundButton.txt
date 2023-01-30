@@ -1,0 +1,78 @@
+//erste Version, unvollständig mit fehlern!
+@Composable
+fun LocationScreen(navController: NavController) {
+    class LocationScreen(navController: NavController) {
+        private lateinit var locationManager: LocationManager
+        private lateinit var locationListener: LocationListener
+
+        fun onCreate() {
+            locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            locationListener = object : LocationListener {
+                override fun onLocationChanged(location: Location?) {
+                   
+                }
+
+                override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+                override fun onProviderEnabled(provider: String?) {}
+                override fun onProviderDisabled(provider: String?) {}
+            }
+
+            // Berechtigungen zur Standortverwendung anfordern
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    LOCATION_PERMISSION_REQUEST_CODE
+                )
+                return
+            }
+
+            // LocationListener regestration
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                0,
+                0f,
+                locationListener
+            )
+
+            // Speichern-Button hinzufügen
+            val saveButton = Button(this)
+            saveButton.text = "Speichern"
+            saveButton.setOnClickListener {
+                val currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                
+            }
+            // Button zur Ansicht hinzufügen
+            addView(saveButton)
+        }
+
+        override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
+        ) {
+            if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    
+                    locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        0,
+                        0f,
+                        locationListener
+                    )
+                } else {
+                    
+                    Toast.makeText(this, "Berechtigungen wurden nicht erteilt", Toast.LENGTH_SHORT).show()
+                }
+            }
+		//MapView noch implementieren, OpenStreetMap, osmdroid
+        }
+    }
+
